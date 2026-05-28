@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>shs8.nl</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #080808;
+      --white: #f0ece4;
+      --accent: #c8a96e;
+      --overlay: rgba(0,0,0,0.68);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ── SECTION 1: HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #bg-video.faded {
+      opacity: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--overlay);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      pointer-events: none;
+    }
+
+    .hero-line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+      color: var(--white);
+      opacity: 0;
+    }
+
+    .hero-text em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-text.sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: clamp(0.75rem, 1.5vw, 1rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.55);
+      margin-top: 1.4rem;
+    }
+
+    /* scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeHint 1s ease 4s forwards;
+    }
+
+    .scroll-hint span {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.35);
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(200,169,110,0.8), transparent);
+      animation: arrowPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes arrowPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    @keyframes fadeHint {
+      to { opacity: 1; }
+    }
+
+    /* ── SECTION 2: CONTACT ── */
+    #contact {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black);
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .contact-inner {
+      width: 100%;
+      max-width: 560px;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.9s cubic-bezier(.16,1,.3,1), transform 0.9s cubic-bezier(.16,1,.3,1);
+    }
+
+    .contact-inner.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 3rem;
+      color: var(--white);
+    }
+
+    .contact-title em {
+      font-style: italic;
+      color: rgba(240,236,228,0.45);
+    }
+
+    .field-group {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.4);
+      margin-bottom: 0.6rem;
+    }
+
+    .field-group input,
+    .field-group textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(240,236,228,0.15);
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: 0.95rem;
+      padding: 0.6rem 0;
+      outline: none;
+      transition: border-color 0.3s ease;
+      caret-color: var(--accent);
+    }
+
+    .field-group input:focus,
+    .field-group textarea:focus {
+      border-bottom-color: var(--accent);
+    }
+
+    .field-group textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .field-line {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.35s ease;
+    }
+
+    .field-group input:focus ~ .field-line,
+    .field-group textarea:focus ~ .field-line {
+      width: 100%;
+    }
+
+    .submit-btn {
+      margin-top: 3rem;
+      background: transparent;
+      border: 1px solid rgba(200,169,110,0.4);
+      color: var(--accent);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+      z-index: -1;
+    }
+
+    .submit-btn:hover {
+      color: var(--black);
+      border-color: var(--accent);
+    }
+
+    .submit-btn:hover::before {
+      transform: translateX(0);
+    }
+
+    .submit-success {
+      display: none;
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .submit-success p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .submit-success span {
+      display: block;
+      margin-top: 0.8rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.35);
+    }
+
+    /* thin gold line decoration */
+    .deco-line {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, rgba(200,169,110,0.4));
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <section id="hero">
+    <video id="bg-video" autoplay muted loop playsinline>
+      <source id="video-src" src="" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <span class="hero-line">
+        <span class="hero-text" id="line1">Why so <em>curious</em>...?</span>
+      </span>
+      <span class="hero-line">
+        <span class="hero-text sub" id="line2">Reach out &nbsp;—&nbsp; fill the form below</span>
+      </span>
+    </div>
+
+    <div class="scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact">
+    <div class="deco-line"></div>
+    <div class="contact-inner" id="contactInner">
+      <p class="contact-label">Get in touch</p>
+      <h2 class="contact-title">Let's talk.<br><em>No obligations.</em></h2>
+
+      <div id="contactForm">
+        <div class="field-group">
+          <label>Your name</label>
+          <input type="text" id="fname" placeholder="—" autocomplete="off">
+          <div class="field-line"></div>
+        </div>
+        <div class="field-group">
+          <label>Email address</label>
+          <input type="email" id="femail" placeholder="—" autocomplete="off">
+          <div class="field-line"></div>
+        </div>
+        <div class="field-group">
+          <label>Message</label>
+          <textarea id="fmessage" placeholder="—"></textarea>
+          <div class="field-line"></div>
+        </div>
+        <button class="submit-btn" onclick="handleSubmit()">Send message</button>
+      </div>
+
+      <div class="submit-success" id="successMsg">
+        <p>Message received.</p>
+        <span>I'll be in touch shortly</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ── RANDOM VIDEO SELECTION ──
+    const videos = [
+      'video1.mp4',
+      'video2.mp4',
+      'video3.mp4',
+      'video4.mp4',
+      'video5.mp4'
+    ];
+    const picked = videos[Math.floor(Math.random() * videos.length)];
+    const videoEl = document.getElementById('bg-video');
+    document.getElementById('video-src').src = picked;
+    videoEl.load();
+
+    // ── TYPEWRITER ANIMATION ──
+    function typeWriter(el, delay) {
+      const text = el.textContent;
+      const html = el.innerHTML;
+      // preserve italic <em> tag
+      el.textContent = '';
+      el.style.opacity = 1;
+
+      // We'll type character by character using the original HTML
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      const fullHTML = temp.innerHTML;
+
+      // Parse into array of chars, preserving tags
+      const parts = [];
+      let i = 0;
+      const raw = fullHTML;
+      while (i < raw.length) {
+        if (raw[i] === '<') {
+          const end = raw.indexOf('>', i);
+          parts.push({ tag: raw.slice(i, end + 1) });
+          i = end + 1;
+        } else {
+          parts.push({ char: raw[i] });
+          i++;
+        }
+      }
+
+      let current = '';
+      let partIdx = 0;
+
+      function next() {
+        if (partIdx >= parts.length) return;
+        const p = parts[partIdx++];
+        if (p.tag) {
+          current += p.tag;
+          el.innerHTML = current;
+          next(); // tags are instant
+        } else {
+          current += p.char;
+          el.innerHTML = current;
+          setTimeout(next, 38);
+        }
+      }
+
+      setTimeout(next, delay);
+    }
+
+    window.addEventListener('load', () => {
+      // Small initial pause so video loads visually
+      setTimeout(() => {
+        typeWriter(document.getElementById('line1'), 0);
+      }, 800);
+      setTimeout(() => {
+        const l2 = document.getElementById('line2');
+        l2.style.opacity = 0;
+        l2.style.transition = 'opacity 0.8s ease';
+        setTimeout(() => { l2.style.opacity = 1; }, 100);
+      }, 2800);
+    });
+
+    // ── VIDEO PAUSE ON SCROLL ──
+    const video = document.getElementById('bg-video');
+    const contactInner = document.getElementById('contactInner');
+    let videoPaused = false;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // contact section visible → fade + pause video
+          if (!videoPaused) {
+            video.classList.add('faded');
+            setTimeout(() => { video.pause(); }, 800);
+            videoPaused = true;
+          }
+          contactInner.classList.add('visible');
+        } else {
+          // scrolled back up → resume video
+          if (videoPaused) {
+            video.play();
+            video.classList.remove('faded');
+            videoPaused = false;
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(document.getElementById('contact'));
+
+    // ── FORM SUBMIT ──
+    function handleSubmit() {
+      const name = document.getElementById('fname').value.trim();
+      const email = document.getElementById('femail').value.trim();
+      const msg = document.getElementById('fmessage').value.trim();
+
+      if (!name || !email || !msg) {
+        // subtle shake on empty fields
+        [fname, femail, fmessage].forEach(id => {
+          const el = document.getElementById(id) || document.getElementById(id.id);
+        });
+        return;
+      }
+
+      // Here you'd wire up your actual form handler (Formspree, Netlify, etc.)
+      // For now we just show success
+      document.getElementById('contactForm').style.opacity = '0';
+      document.getElementById('contactForm').style.transition = 'opacity 0.4s ease';
+      setTimeout(() => {
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        document.getElementById('successMsg').style.opacity = '0';
+        document.getElementById('successMsg').style.transition = 'opacity 0.6s ease';
+        setTimeout(() => { document.getElementById('successMsg').style.opacity = '1'; }, 50);
+      }, 400);
+    }
+  </script>
+</body>
+</html>
